@@ -3,7 +3,7 @@ services:
   humhub:
     build: .
     ports:
-      - "8080:80"
+      - "80:80"
     environment:
       HUMHUB_DB_USER: ${HUMHUB_DB_USER}
       HUMHUB_DB_PASSWORD: ${HUMHUB_DB_PASSWORD}
@@ -20,20 +20,22 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
+    restart: always
   db:
     image: mariadb
-#    ports:
-#    - "3306:3306"
+    ports:
+    - "3306:3306"
     environment:
       MYSQL_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
       MYSQL_DATABASE: 'humhub'
       MYSQL_USER: ${HUMHUB_DB_USER}
       MYSQL_PASSWORD: ${HUMHUB_DB_PASSWORD}
       command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
-    volumes:
-      - "/var/lib/mysql:/var/lib/mysql"
+#    volumes:
+#      - "/var/lib/mysql:/var/lib/mysql"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "--silent"]
       interval: 30s
       timeout: 10s
       retries: 3
+    restart: always
